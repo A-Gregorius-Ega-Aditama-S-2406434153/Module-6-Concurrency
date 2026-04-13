@@ -27,3 +27,17 @@ while with it the response becomes a proper HTTP message. Writing the response u
 still just carefully structured text sent over a TCP stream.
 
 ![Commit 2 screen capture](/assets/images/commit2.png)
+
+### Commit 3 Reflection notes
+In this part, I learned that returning the same page for every route is not enough, because the server should validate
+what the client actually requests. By checking whether the request line is exactly `GET / HTTP/1.1`, the server can
+return `hello.html` for the main page and a `404 NOT FOUND` response for other paths. This made the server behave more
+like a real web server, because it now distinguishes between a valid route and a missing page.
+
+The refactoring step was also important. At first, the `if` and `else` branches repeated the same file-reading and 
+response-writing logic. Refactoring that into a tuple like `(status_line, filename)` made the code cleaner because the 
+only thing that changes between cases is the status and the file name, while the rest of the response construction
+stays the same. I think this improves readability and maintainability, because future changes 
+only need to be made in one place.
+
+![Commit 3 screen capture](/assets/images/commit3.png)
