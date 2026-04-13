@@ -12,3 +12,18 @@ I also learned how the browser’s request starts to look at the byte and line l
 until the empty line helped me see the HTTP request structure more clearly: request line, headers, then a blank line.
 One detail I found interesting is that the browser may open multiple connections or retry when the server does not
 send back a proper response yet, so seeing repeated connection messages is normal and not necessarily a bug.
+
+
+### Commit 2 Reflection notes
+
+This checkpoint helped me understand that a web server must not only read requests, but also send a correctly
+formatted  HTTP response. The response needs a status line, headers, a blank line, and then the message body.
+Returning only `200 OK` is enough to make a minimal response, but reading `hello.html` and sending 
+it back made the server actually  useful because the browser could render visible HTML content.
+
+I also understood why `Content-Length` matters. Without it, the browser may not know how much body data to expect,
+while with it the response becomes a proper HTTP message. Writing the response using
+`stream.write_all(response.as_bytes())` showed me that the browser only sees raw bytes, so even a simple web page is
+still just carefully structured text sent over a TCP stream.
+
+![Commit 2 screen capture](/assets/images/commit2.png)
