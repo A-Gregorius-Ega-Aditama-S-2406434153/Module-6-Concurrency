@@ -41,3 +41,14 @@ stays the same. I think this improves readability and maintainability, because f
 only need to be made in one place.
 
 ![Commit 3 screen capture](/assets/images/commit3.png)
+
+### Commit 4 Reflection notes
+This checkpoint made the weakness of a single-threaded server very obvious. By adding the `/sleep` route and 
+calling `thread::sleep`, I could simulate a slow request and directly observe that the server handles requests
+one by one. When one client accesses `/sleep`, another client requesting `/` must wait until the sleep finishes,
+even though `/` itself is a fast request.
+
+From this experiment, I learned the idea of head-of-line blocking in a simple and practical way. The problem
+is not that the server cannot answer, but that the whole request pipeline is blocked by one slow task.
+This helped me understand why concurrency matters in server design: even if the application logic is simple,
+bad request scheduling can still make the user experience feel slow.
