@@ -63,3 +63,13 @@ I also learned that the `ThreadPool` API is designed to feel similar to `thread:
 which accepts a closure to run. The book also explains why validating the pool size matters: zero threads is logically
 invalid, so `new` checks that with `assert!(size > 0)`. What I like most here is that the thread pool is not just
 an optimization, but a design improvement that makes the server safer and more scalable under load.
+
+### Commit Bonus Reflection notes
+The bonus idea of replacing `new` with `build` made me think more carefully about API design. Using `new` with
+`assert!` treats an invalid thread-pool size as an unrecoverable programmer error, while `build` returning
+`Result<ThreadPool, PoolCreationError>` makes the failure explicit and allows the caller to handle it gracefully.
+
+From this, I learned that constructor design is not only about creating objects, but also about deciding how errors
+should be communicated. For a learning project, `new` is simple and direct. But for a more production-oriented design,
+`build` is more flexible because it separates normal construction from error handling in a way that is clearer to the
+caller.
