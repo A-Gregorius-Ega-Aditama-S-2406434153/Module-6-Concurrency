@@ -52,3 +52,14 @@ From this experiment, I learned the idea of head-of-line blocking in a simple an
 is not that the server cannot answer, but that the whole request pipeline is blocked by one slow task.
 This helped me understand why concurrency matters in server design: even if the application logic is simple,
 bad request scheduling can still make the user experience feel slow.
+
+### Commit 5 Reflection notes
+In this checkpoint, I learned why a thread pool is a better design than spawning an unlimited number of threads.
+A thread pool keeps a fixed number of worker threads ready to handle jobs, so the server can process multiple requests
+concurrently while still controlling resource usage. This increases throughput, because one slow request does 
+not automatically block all other requests the way it did in the single-threaded version.
+
+I also learned that the `ThreadPool` API is designed to feel similar to `thread::spawn`, especially through execute,
+which accepts a closure to run. The book also explains why validating the pool size matters: zero threads is logically
+invalid, so `new` checks that with `assert!(size > 0)`. What I like most here is that the thread pool is not just
+an optimization, but a design improvement that makes the server safer and more scalable under load.
